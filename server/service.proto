@@ -1,0 +1,19 @@
+//TO GENERATE -> protoc -I . service.proto --go_out=plugins=grpc:.
+
+syntax = "proto3";
+package main;
+
+// A simple test service definition.
+service TestServer {
+    // Mutiplies two values
+    rpc Multiply (MultiplyRequest) returns (MultiplyReply) {}
+  }
+  
+  message MultiplyRequest {
+    int32 x = 1;
+    int32 y = 2;
+  }
+  
+  message MultiplyReply {
+    int32 result = 1;
+  }
