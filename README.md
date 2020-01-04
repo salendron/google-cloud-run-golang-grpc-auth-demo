@@ -1,17 +1,31 @@
+# Google Cloud Run GRPC Microservice Service to Service Authentication Demo using Google Service Accounts
+## Overview
+This is a fully working implementation of two Cloud Run Microservices, one acting as GRPC server and the other as GRPC client. The server only accepts invocation, if the caller has the right service account.
+Both services are written in Go. I'm only making this public, because it took me way too long to find out how this works. So maybe some ome with the same problem will find this and it will save him/her some time.
+In this guide I also show how I generated the service from the service.proto file in the server directory. So you can see how the whole service was created. If you onow this already you can skip this and just take a look at the client part and setup of the service account.
 ## Create server
+First we need to create a new directory for hour demo grpc server service. Inside of this directory we first initialize a go module and install google.golang.org/grpc. This is needed to later on deploy it as a Cloud Run service.
+```
 mkdir server
 cd server
 go mod init server
 go get google.golang.org/grpc
+```
+Now we take the service.proto file (just take it from the server directory of this repository) and put it into your local server directory and generate the grpc service like this.
+```
+protoc -I . service.proto --go_out=plugins=grpc:.
+```
+Also cooy the Dockerfile, it's very basic, but enough for a simple Cloud Run service like this from the server directory and copy it into your local server directory.
+The last thing that is missing is now the actual service. It is implemented in the server.go file in the server directory. So also copy this one to your local directory.
+If you take a look at this file, you'll find out that this service has only one method, which multiplies two numbers and then returns the result. Enough tobact as a test service.
 
-Implement service.proto
-Generate go service -> protoc -I . service.proto --go_out=plugins=grpc:.
-Implement server.go
-Implement Dockerfile
-Deploy server
-gcloud builds submit --tag gcr.io/collector-264012/demosvr
-gcloud beta run deploy --image gcr.io/collector-264012/demosvr
-
+## Deploy server
+At this point I assume that you already have a GCP project and the gcloud util setup, if not Google will tell you how to do so.
+So let's deploy your server like this. (You have to replace Project-Id and Service-Name with your values of course.)
+```
+gcloud builds submit --tag gcr.io/Project-Id/Service-Name
+gcloud beta run deploy --image gcr.io/Project-Id/Service-Name
+```
 Select Cloud Run (fully managed)
 Select Region
 Select service name
