@@ -44,7 +44,7 @@ Now we create a new directory for hour demo grpc client service. Inside of this 
 ```
 go mod init client
 go get google.golang.org/grpc
-github.com/salrashid123/oauth2/google
+go get github.com/salrashid123/oauth2/google
 ```
 Again copy the Docker file and service.pb.go to your local client directory and also copy the client.go file to there. This file is where the magic happens.
 As you can see the main method in this file just starts a http server with one handler that calls multiply and returns the result or an error, if one occurs. We will use the error handler to test if invocation fails, if we use the wrong service account. 
