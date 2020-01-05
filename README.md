@@ -15,21 +15,24 @@ Now we take the service.proto file (just take it from the server directory of th
 ```
 protoc -I . service.proto --go_out=plugins=grpc:.
 ```
-Also cooy the Dockerfile, it's very basic, but enough for a simple Cloud Run service like this from the server directory and copy it into your local server directory.
-The last thing that is missing is now the actual service. It is implemented in the server.go file in the server directory. So also copy this one to your local directory.
-If you take a look at this file, you'll find out that this service has only one method, which multiplies two numbers and then returns the result. Enough tobact as a test service.
+Also cooy the Dockerfile, it's very basic, but enough for a simple Cloud Run service like this, from the server directory and copy it into your local server directory.
+The last thing that is missing is the actual service. It is implemented in the server.go file in the server directory. So also copy this one to your local directory.
+If you take a look at this file, you'll find out that this service has only one method, which multiplies two numbers and then returns the result. Enough to act as a test service.
 
 ## Deploy server
-At this point I assume that you already have a GCP project and the gcloud util setup, if not Google will tell you how to do so.
+At this point I assume that you already have a GCP project and the gcloud util setup, if not, Google will tell you how to do so.
 So let's deploy your server like this. (You have to replace Project-Id and Service-Name with your values of course.)
 ```
 gcloud builds submit --tag gcr.io/Project-Id/Service-Name
 gcloud beta run deploy --image gcr.io/Project-Id/Service-Name
 ```
-Select Cloud Run (fully managed)
-Select Region
-Select service name
-Allow unauthenticated false
+During this process you will be asked a few questions, about how to configure your're service. Answer them as follows:
+* Select Cloud Run (fully managed)
+* Select your prefered Region
+* Select service name or leave blank to keep it as specified
+* Do not allow unauthenticated invocation (that's important)
+
+Now your demo grpc server service should be up and running. Head over to GCP console -> Cloud Run to see, if it is there.
 
 ## Create Client
 go mod init client
